@@ -23,25 +23,26 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
   <style>
     :root {
-      --bg: #0f172a;
-      --panel: #111827;
-      --panel-soft: #1f2937;
-      --border: #334155;
-      --text: #e5e7eb;
-      --muted: #94a3b8;
-      --blue: #3b82f6;
-      --green: #16a34a;
-      --yellow: #ca8a04;
-      --orange: #ea580c;
-      --red: #dc2626;
-      --radius: 14px;
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      --bg: #0f0f11;
+      --panel: #18181b;
+      --panel-soft: #1f1f23;
+      --border: #27272a;
+      --text: #e4e4e7;
+      --muted: #71717a;
+      --accent: #a855f7;
+      --blue: #a855f7;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --orange: #fb923c;
+      --red: #ef4444;
+      --radius: 12px;
+      --shadow: 0 8px 24px rgba(0,0,0,0.4);
     }
 
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
     body {
-      background: radial-gradient(circle at top right, #16264f 0%, var(--bg) 40%);
+      background: #0f0f11;
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
       line-height: 1.5;
@@ -88,16 +89,17 @@
 
     .privacy-banner {
       margin: 18px 0 20px;
-      border: 1px solid #1d4ed8;
-      background: linear-gradient(180deg, #172554 0%, #111827 100%);
+      border: 1px solid #27272a;
+      background: rgba(168,85,247,0.05);
       border-radius: var(--radius);
       padding: 12px 14px;
-      color: #dbeafe;
+      color: #c084fc;
       font-weight: 600;
+      font-size: 13px;
     }
 
     .panel {
-      background: rgba(17, 24, 39, 0.92);
+      background: #18181b;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -124,19 +126,19 @@
       width: 100%;
       min-height: 320px;
       resize: vertical;
-      border: 1px solid #334155;
-      border-radius: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
       padding: 14px;
-      background: #0b1222;
-      color: #dbeafe;
+      background: #0f0f11;
+      color: #e4e4e7;
       font-size: 13px;
       line-height: 1.5;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     }
     textarea:focus {
       outline: none;
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(168,85,247,0.2);
     }
 
     .buttons {
@@ -147,26 +149,27 @@
       align-items: center;
     }
     button {
-      border: 1px solid #3b82f6;
-      background: #1d4ed8;
+      border: none;
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
       color: white;
       border-radius: 10px;
-      padding: 10px 14px;
+      padding: 10px 18px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 120ms ease, filter 120ms ease, background 120ms ease;
+      transition: opacity 120ms ease, transform 120ms ease;
     }
-    button:hover { filter: brightness(1.06); }
+    button:hover { opacity: 0.9; }
     button:active { transform: translateY(1px); }
     .btn-secondary {
-      background: #1f2937;
-      border-color: #475569;
-      color: #d1d5db;
+      background: #18181b;
+      border: 1px solid #27272a;
+      color: #71717a;
     }
     .btn-share {
-      background: #065f46;
-      border-color: #047857;
+      background: #18181b;
+      border: 1px solid #27272a;
+      color: #71717a;
     }
     .btn-inline {
       padding: 8px 10px;
@@ -227,9 +230,9 @@
     }
 
     .score-card {
-      border: 1px solid #334155;
-      border-radius: 12px;
-      background: #0b1222;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #111113;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -252,9 +255,9 @@
     .score-letter { font-size: 14px; color: var(--muted); }
 
     .summary-card {
-      border: 1px solid #334155;
-      border-radius: 12px;
-      background: #0b1222;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #111113;
       padding: 14px;
     }
     .summary-title { margin: 0 0 10px; font-size: 16px; }
@@ -284,10 +287,10 @@
       gap: 10px;
     }
     .finding {
-      border: 1px solid #334155;
-      border-radius: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
       overflow: hidden;
-      background: #0b1222;
+      background: #111113;
     }
     .finding-head {
       width: 100%;
@@ -302,7 +305,7 @@
       gap: 10px;
       cursor: pointer;
     }
-    .finding-head:hover { background: #111c33; }
+    .finding-head:hover { background: #1f1f23; }
     .finding-title {
       display: flex;
       align-items: center;
@@ -317,10 +320,10 @@
       letter-spacing: 0.3px;
     }
     .finding-body {
-      border-top: 1px solid #233047;
+      border-top: 1px solid var(--border);
       padding: 12px 14px;
       display: none;
-      color: #cbd5e1;
+      color: #a1a1aa;
       font-size: 14px;
     }
     .finding.open .finding-body { display: block; }
@@ -328,32 +331,144 @@
 
     .cta {
       margin-top: 16px;
-      border: 1px solid #1d4ed8;
-      background: linear-gradient(180deg, rgba(30, 64, 175, 0.2), rgba(17, 24, 39, 0.9));
-      border-radius: 12px;
+      border: 1px solid #27272a;
+      background: rgba(168,85,247,0.06);
+      border-radius: 10px;
       padding: 14px;
-      color: #dbeafe;
+      color: #a1a1aa;
     }
-    .cta a { color: #93c5fd; font-weight: 700; }
+    .cta a { color: #c084fc; font-weight: 700; }
 
-    footer {
-      margin-top: 24px;
-      color: var(--muted);
-      font-size: 13px;
-      border-top: 1px solid #1e293b;
-      padding-top: 14px;
+    /* NAV */
+    .site-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 48px;
+      border-bottom: 1px solid #27272a;
+      position: sticky;
+      top: 0;
+      background: rgba(15,15,17,0.95);
+      backdrop-filter: blur(8px);
+      z-index: 100;
     }
-    footer a { color: #93c5fd; }
-  </style>
+    .site-nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #e4e4e7;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .site-nav-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a855f7, #38bdf8);
+      opacity: 0.9;
+      flex-shrink: 0;
+    }
+    .site-nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .site-nav-links a {
+      color: #71717a;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .site-nav-links a:hover { color: #e4e4e7; }
+    .site-nav-stars {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid #27272a;
+      background: #18181b;
+      text-decoration: none;
+      transition: border-color 0.2s;
+      font-size: 12px;
+      color: #71717a;
+      font-weight: 500;
+    }
+    .site-nav-stars:hover { border-color: #a855f7; }
+    /* SITE FOOTER */
+    .site-footer {
+      border-top: 1px solid #27272a;
+      margin-top: 48px;
+    }
+    .site-footer-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 28px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .site-footer-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .site-footer-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a855f7, #38bdf8);
+      opacity: 0.7;
+    }
+    .site-footer-copy { font-size: 12px; color: #3f3f46; }
+    .site-footer-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .site-footer-links a {
+      font-size: 12px;
+      color: #3f3f46;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .site-footer-links a:hover { color: #71717a; }
+    @media (max-width: 600px) {
+      .site-nav { padding: 14px 20px; }
+      .site-nav-links a:not(.site-nav-stars) { display: none; }
+      .site-footer-inner { padding: 20px; flex-direction: column; align-items: flex-start; }
+      .container { padding: 20px 0 48px; }
+    }
 </head>
 <body>
+  <!-- NAVBAR -->
+  <nav class="site-nav">
+    <a href="/" class="site-nav-logo">
+      <div class="site-nav-dot"></div>
+      Orchesis
+    </a>
+    <div class="site-nav-links">
+      <a href="https://github.com/poushwell/orchesis/blob/main/QUICK_START.md" target="_blank" rel="noopener noreferrer">Docs</a>
+      <a href="https://github.com/poushwell/orchesis" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="/blog">Blog</a>
+      <a href="https://github.com/poushwell/orchesis" target="_blank" rel="noopener noreferrer" class="site-nav-stars">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="#a855f7"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>
+        <span id="stars-count">—</span>
+      </a>
+    </div>
+  </nav>
+
   <div class="container">
     <header class="header">
       <div>
         <h1>Is Your MCP Server Safe?</h1>
         <div class="tagline">Free MCP Security Scanner</div>
       </div>
-      <div class="logo">ORCHESIS</div>
     </header>
 
     <div class="privacy-banner">Privacy first: your config never leaves your browser. Zero data collection.</div>
@@ -421,7 +536,32 @@
     </footer>
   </div>
 
+  <!-- SITE FOOTER -->
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="site-footer-left">
+        <div class="site-footer-dot"></div>
+        <span class="site-footer-copy">© 2025 Orchesis</span>
+      </div>
+      <div class="site-footer-links">
+        <a href="https://github.com/poushwell/orchesis" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/poushwell/orchesis/blob/main/QUICK_START.md" target="_blank" rel="noopener noreferrer">Docs</a>
+        <a href="/blog">Blog</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="mailto:hello@orchesis.io">hello@orchesis.io</a>
+      </div>
+    </div>
+  </footer>
+
   <script src="./scanner-engine.js"></script>
+  <script>
+    // Fetch GitHub stars
+    fetch("https://api.github.com/repos/poushwell/orchesis")
+      .then(r => r.json())
+      .then(d => { if (typeof d.stargazers_count === "number") document.getElementById("stars-count").textContent = d.stargazers_count; })
+      .catch(() => {});
+  </script>
   <script>
     const EXAMPLES = {
       vulnerable: {
