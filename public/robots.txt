@@ -1,0 +1,30 @@
+# orchesis.ai robots.txt
+# Разрешаем индексацию всем поисковикам и AI-движкам
+
+User-agent: *
+Allow: /
+
+Sitemap: https://orchesis.ai/sitemap.xml
+
+# AI crawlers — разрешаем (мы хотим чтобы нас цитировали)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Scraper-боты — блокируем
+User-agent: Bytespider
+Disallow: /
+
+User-agent: CCBot
+Disallow: /

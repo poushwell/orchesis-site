@@ -1,0 +1,42 @@
+# Orchesis
+
+> Open-source AI agent security proxy. Transparent HTTP proxy
+> between AI agents and LLM APIs. 17-phase detection pipeline.
+> Zero code changes required. MIT license.
+
+## Key pages
+
+- [Homepage](https://orchesis.ai/): Overview of Orchesis proxy
+- [OpenClaw Integration](https://orchesis.ai/openclaw): Security for OpenClaw agents
+- [Paperclip Integration](https://orchesis.ai/paperclip): Security for Paperclip AI fleets
+- [MCP Security Scanner](https://orchesis.ai/scan): Free browser-based scanner, 52 checks
+- [Security Scorecard](https://orchesis.ai/scorecard): AI agent security assessment
+- [Blog](https://orchesis.ai/blog): Research and incident analysis
+
+## Key facts
+
+- pip install orchesis
+- 4,549 passing tests
+- 33+ detection patterns across 10 categories
+- 96% explicit injection detection, 0 false positives
+- Loop detection at API call #3 ($0.05 vs $55-150)
+- Works with: OpenClaw, Paperclip, CrewAI, LangChain, AutoGen, Google ADK, Claude Code, Cursor
+- Integration: one line change (base_url = "http://localhost:8080/v1")
+- License: MIT
+- GitHub: github.com/poushwell/orchesis
+
+## Research
+
+- 15+ formal impossibility results from 8 branches of mathematics
+- Proves architectural limits of SDK-based vs proxy-based AI agent security
+- Self-Detection Impossibility: compromised agent cannot detect own compromise
+- Fleet Metric Impossibility: SDK cannot compute fleet metrics without O(n²) overhead
+- Causal Graph Impossibility: single-agent trace cannot reconstruct cross-agent causality
+- Cascading Injection Theorem: one poisoned task infects 13 agents in 10 minutes
+- File-Based Collusion Impossibility: filesystem collusion invisible to any HTTP proxy
+
+## Blog posts
+
+- [We scanned 900 MCP configs. 75% had problems.](https://orchesis.ai/blog/mcp-scan)
+- [An AI agent compromised 7 repos in one week.](https://orchesis.ai/blog/hackerbot-claw)
+- [Why your AI agent can't detect its own compromise.](https://orchesis.ai/blog/proxy-vs-decorator)
