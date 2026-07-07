@@ -1395,6 +1395,7 @@ export default function Home() {
               { label: "Telegram", href: "/telegram" },
               { label: "Paperclip", href: "/paperclip" },
               { label: "Blog", href: "/blog" },
+              { label: "Pavel Ishchin", href: "https://ishchin.com" },
               { label: "Privacy", href: "/privacy" },
               { label: "Terms", href: "/terms" },
             ].map(link => (
