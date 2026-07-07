@@ -5,9 +5,13 @@ User-agent: *
 Allow: /
 
 Sitemap: https://orchesis.ai/sitemap.xml
+Sitemap: https://orchesis.ai/sitemap-lab.xml
 
-# AI crawlers — разрешаем (мы хотим чтобы нас цитировали)
+# AI answer-engine crawlers — разрешаем (мы хотим чтобы нас читали и цитировали)
 User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
 Allow: /
 
 User-agent: ChatGPT-User
@@ -19,10 +23,33 @@ Allow: /
 User-agent: ClaudeBot
 Allow: /
 
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
 User-agent: PerplexityBot
 Allow: /
 
-# Scraper-боты — блокируем
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# Scraper-боты — блокируем (как в исходной версии)
+# ПРИМЕЧАНИЕ: CCBot (Common Crawl) кормит training-corpus. Для parametric-плея
+# (попадание в веса будущих моделей) его позже, возможно, стоит РАЗРЕШИТЬ. Пока — как было.
 User-agent: Bytespider
 Disallow: /
 
