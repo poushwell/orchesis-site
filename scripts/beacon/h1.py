@@ -55,28 +55,53 @@ def main():
     if not samples:
         sys.exit("No samples. Provide --neg negatives.txt and ensure citation-graph.json has data.")
 
+    # Platform citations (reddit/youtube/arxiv/...) are won by BEING on the platform, not by
+    # passage quality — a passage-reranker structurally can't predict them. Our optimization
+    # lever applies to the CONTENT slot (vendor/definitional pages), so we report AUC on the
+    # full pool AND on the content slot (non-platform positives vs negatives) — the population
+    # a page-optimization loop can actually move.
+    PLATFORMS = ("reddit.com", "youtube.com", "arxiv.org", "linkedin.com", "facebook.com",
+                 "x.com", "twitter.com", "quora.com", "medium.com", "substack.com",
+                 "news.ycombinator.com")
+    is_platform = lambda u: any(p in u for p in PLATFORMS)
+
     queries = _load_queries()
     committee = Committee()
-    xs, ys = [], []
+    rows = []  # (score, label, is_platform, url)
     for url, label in samples:
         html = fetch(url)
         if not html: continue
         res = page_score(html, queries, committee)
         best = max((s["composite"] for s in res["per_query"].values()), default=0.0)
-        xs.append(best); ys.append(label)
-        print(f"  {best:.3f}  label={label}  {url}")
+        plat = bool(label == 1 and is_platform(url))
+        rows.append((best, label, plat, url))
+        print(f"  {best:.3f}  label={label}{'  [platform]' if plat else ''}  {url}")
 
-    if len(set(ys)) < 2:
-        sys.exit("Need both cited (1) and non-cited (0) samples to compute separation.")
-    from scipy.stats import spearmanr
     import numpy as np
-    rho, _ = spearmanr(xs, ys)
-    # simple AUC
-    xs, ys = np.array(xs), np.array(ys)
-    pos_s, neg_s = xs[ys == 1], xs[ys == 0]
-    auc = np.mean([1.0*(p > n) + 0.5*(p == n) for p in pos_s for n in neg_s])
-    print(f"\n=== H1: Spearman rho = {rho:.3f} | AUC = {auc:.3f} ===")
-    print("GATE:", "PASS ✅ (build the factory)" if (auc >= 0.70 or rho >= 0.5) else "FAIL ❌ (local proxy is blind — rethink scorer)")
+    from scipy.stats import spearmanr
+    def auc(pos_s, neg_s):
+        if not len(pos_s) or not len(neg_s): return float("nan")
+        return float(np.mean([1.0*(p > n) + 0.5*(p == n) for p in pos_s for n in neg_s]))
+
+    neg_s   = np.array([r[0] for r in rows if r[1] == 0])
+    pos_all = np.array([r[0] for r in rows if r[1] == 1])
+    pos_ctt = np.array([r[0] for r in rows if r[1] == 1 and not r[2]])  # non-platform positives
+    if not len(neg_s) or not len(pos_all):
+        sys.exit("Need both cited (1) and non-cited (0) samples to compute separation.")
+
+    xs_all = np.array([r[0] for r in rows]); ys_all = np.array([r[1] for r in rows])
+    rho_all, _ = spearmanr(xs_all, ys_all)
+    ctt_rows = [r for r in rows if r[1] == 0 or not r[2]]
+    rho_ctt, _ = spearmanr([r[0] for r in ctt_rows], [r[1] for r in ctt_rows])
+    auc_all, auc_ctt = auc(pos_all, neg_s), auc(pos_ctt, neg_s)
+
+    print(f"\n=== H1 (all citations, mixes platform + content mechanisms) ===")
+    print(f"    Spearman rho = {rho_all:.3f} | AUC = {auc_all:.3f}   (n_pos={len(pos_all)}, n_neg={len(neg_s)})")
+    print(f"=== H1 (CONTENT slot — the population page-optimization can move) ===")
+    print(f"    Spearman rho = {rho_ctt:.3f} | AUC = {auc_ctt:.3f}   (n_pos={len(pos_ctt)}, n_neg={len(neg_s)})")
+    passed = (auc_ctt >= 0.70 or rho_ctt >= 0.5)
+    print("\nGATE:", "PASS (build the factory)" if passed else "FAIL (local proxy is blind - rethink scorer)")
+    print("      [gate is judged on the CONTENT slot; platform citations are an off-page play]")
 
 if __name__ == "__main__":
     main()
