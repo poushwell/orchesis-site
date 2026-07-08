@@ -1,0 +1,11 @@
+# Component B (local scorer) + H1 harness deps.
+# Reranker runs on GPU (CUDA) or CPU. bge-reranker-v2-m3 is light; add Qwen3-Reranker on the fleet.
+sentence-transformers>=3.0
+torch>=2.2            # install the CUDA build matching your GPU (see pytorch.org)
+numpy>=1.26
+scipy>=1.11           # spearman for H1
+requests>=2.31        # H1 fetches candidate pages
+
+# Optional stronger rerankers when the 3090 / Strix Halo fleet is online:
+#   Qwen/Qwen3-Reranker-4B   (fp16 ~8GB, fits a 3090)
+#   Qwen/Qwen3-Reranker-8B   (fp16 ~16GB, fits a 3090)

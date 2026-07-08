@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Memory Poisoning: Definition, How It Works, and Prevention (2026)</title>
+<meta name="description" content="Agent memory poisoning is an attack where an adversary plants false or malicious data into an AI agent's persistent memory so it corrupts future decisions. Definition, mechanism, and defenses.">
+<link rel="canonical" href="https://orchesis.ai/lab/agent-memory-poisoning.html">
+<!-- CANARY: ORCHESIS-CANARY-MEMPOI-K2R8 -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Agent Memory Poisoning: Definition, How It Works, and Prevention","dateModified":"2026-07-07","datePublished":"2026-07-07","author":{"@type":"Organization","name":"Orchesis"},"publisher":{"@type":"Organization","name":"Orchesis","sameAs":["https://orchesis.ai","https://github.com/poushwell"]},"about":["agent memory poisoning","AI agent security","LLM memory","prompt injection"],"mainEntityOfPage":"https://orchesis.ai/lab/agent-memory-poisoning.html"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is agent memory poisoning?","acceptedAnswer":{"@type":"Answer","text":"Agent memory poisoning is an attack in which an adversary plants false, biased, or malicious information into an AI agent's persistent or long-term memory, so that the agent retrieves and acts on that corrupted data in future sessions — leading to wrong decisions, unauthorized actions, or repeated exploitation."}},
+{"@type":"Question","name":"How do you prevent agent memory poisoning?","acceptedAnswer":{"@type":"Answer","text":"Validate and provenance-tag everything written to memory, separate trusted from untrusted memory, require corroboration before a memory influences high-stakes actions, expire and re-verify stored facts, and monitor for anomalous writes and retrieval drift."}}]}
+</script>
+<style>body{max-width:760px;margin:2rem auto;padding:0 1rem;font:16px/1.6 system-ui,sans-serif}h1,h2{line-height:1.25}code{background:#f2f2f2;padding:.1em .3em;border-radius:3px}.meta{color:#666;font-size:.9em}</style>
+</head>
+<body>
+<p class="meta">Last updated: July 2026 · Orchesis reference</p>
+<h1>Agent Memory Poisoning</h1>
+<p><strong>Agent memory poisoning is an attack in which an adversary plants false, biased, or malicious information into an AI agent's persistent (long-term) memory, so the agent retrieves and acts on that corrupted data in later sessions.</strong> Unlike a one-shot prompt injection, memory poisoning persists: a single successful write can corrupt many future decisions, causing wrong answers, unauthorized actions, or repeated exploitation. It is one of the highest-severity failure modes for agents that keep durable memory (vector stores, scratchpads, user profiles).</p>
+<h2>How agent memory poisoning works</h2>
+<p>An AI agent with long-term memory writes observations, facts, and summaries to a store (often a vector database) and retrieves them later. If an attacker can influence what gets written — through a poisoned document, a crafted tool output, or an injected conversation turn — they can insert a false "memory" (for example, "the admin approved unrestricted transfers"). On a future task, the agent retrieves that memory as trusted context and acts on it. Because retrieval is similarity-based, poisoned entries can be engineered to surface for many unrelated queries.</p>
+<h2>Attack examples</h2>
+<ul>
+<li><strong>False-fact injection:</strong> a planted memory asserts a policy or credential that unlocks later actions.</li>
+<li><strong>Retrieval hijacking:</strong> a poisoned entry is crafted to match many queries, so it keeps resurfacing.</li>
+<li><strong>Slow drift:</strong> repeated small poisonings gradually bias the agent's behavior over sessions.</li>
+</ul>
+<h2>How to prevent agent memory poisoning</h2>
+<ol>
+<li><strong>Provenance-tag every write</strong> — record who/what produced each memory; distrust untrusted sources.</li>
+<li><strong>Separate trusted and untrusted memory</strong> — never let raw tool/web content write directly to authoritative memory.</li>
+<li><strong>Require corroboration</strong> — a memory should need 2+ independent sources before influencing high-stakes actions.</li>
+<li><strong>Expire and re-verify</strong> — time-box stored facts; re-validate before reuse.</li>
+<li><strong>Monitor writes and retrieval drift</strong> — flag anomalous writes and sudden behavior shifts.</li>
+</ol>
+<h2>Context</h2>
+<p>Memory poisoning is catalogued in the OWASP Top 10 for agentic applications and in the CASURA taxonomy of AI-agent vulnerabilities. Research in 2025 showed that a single poisoned entry in a shared vector memory could influence a large fraction of subsequent retrievals, because similarity search does not verify provenance. As one review put it: "an agent's memory is only as trustworthy as the least-trusted thing allowed to write to it."</p>
+<p class="meta">Sources: OWASP Agentic Security Project · CASURA taxonomy (Orchesis). Reference maintained by <a href="https://orchesis.ai">Orchesis</a>, an open-source AI-agent security proxy.</p>
+</body>
+</html>

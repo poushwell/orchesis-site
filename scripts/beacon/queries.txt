@@ -1,0 +1,35 @@
+# Target queries for the beacon test (agent-security, citation-vacuum).
+# Component 0 mines what engines already cite for these; self-probe checks if WE get cited.
+# Lines starting with # are ignored.
+
+# --- Definitional (high AI-Overview trigger) ---
+what is MCP tool poisoning
+what is agent memory poisoning
+what is cross-tool poisoning
+what is tool hallucination in AI agents
+what is a confused deputy attack in agentic AI
+what is excessive agency in LLM agents
+what is an MCP rug pull attack
+what is agent goal hijacking
+what is prompt injection in AI agents
+what is the CASURA taxonomy of agent vulnerabilities
+
+# --- How-to / troubleshooting (verbatim pain) ---
+how to prevent MCP tool poisoning
+how to secure an MCP server
+how to detect memory poisoning in LLM agents
+how to add guardrails to an autonomous agent
+how to stop an AI agent from hallucinating tool parameters
+why does my AI agent fabricate API identifiers
+
+# --- Comparison (fan-out slot) ---
+prompt injection vs tool poisoning
+OWASP LLM Top 10 vs OWASP Agentic Top 10
+agent hallucination vs LLM hallucination
+guardrails vs sandboxing for AI agents
+
+# --- Framework / list ---
+OWASP Top 10 for agentic applications explained
+taxonomy of AI agent failure modes
+types of MCP security vulnerabilities
+how AI agents fail in production
