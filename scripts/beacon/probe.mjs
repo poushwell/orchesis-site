@@ -1,9 +1,21 @@
 // Shared probe: ask Perplexity Sonar, return answer + citations.
-// Requires env PPLX_API_KEY (put it in .env.local — it is gitignored).
-const KEY = process.env.PPLX_API_KEY;
+// Auto-loads PPLX_API_KEY from .env.local (repo root) if not already in env.
+import { readFileSync } from "node:fs";
+
+function loadKey() {
+  if (process.env.PPLX_API_KEY) return process.env.PPLX_API_KEY;
+  try {
+    const env = readFileSync(new URL("../../.env.local", import.meta.url), "utf8");
+    // accept "PPLX_API_KEY=pplx-..." or a bare "pplx-..." line
+    const m = env.match(/^\s*PPLX_API_KEY\s*=\s*["']?(pplx-[^\s"']+)/m) || env.match(/^\s*(pplx-[^\s"']+)/m);
+    if (m) return m[1];
+  } catch { /* no .env.local */ }
+  return null;
+}
+const KEY = loadKey();
 
 export async function askPerplexity(query, model = "sonar") {
-  if (!KEY) throw new Error("PPLX_API_KEY not set (add it to .env.local or export it)");
+  if (!KEY) throw new Error("PPLX_API_KEY not found (add it to .env.local as PPLX_API_KEY=pplx-... or export it)");
   const r = await fetch("https://api.perplexity.ai/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${KEY}` },
