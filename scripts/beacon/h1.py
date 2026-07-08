@@ -36,11 +36,14 @@ def main():
     if not cg_path.exists():
         sys.exit("Run Component 0 first: node scripts/beacon/citation-graph.mjs  (needs PPLX_API_KEY)")
     cg = json.loads(cg_path.read_text(encoding="utf-8"))
-    # positives: any cited URL from perQuery (flatten cited domains is domain-level; use raw if present)
-    pos = []
+    # positives: the ACTUAL cited article URLs engines returned (full URLs, not domain roots).
+    # Fall back to domain roots only for old graphs that didn't store citedUrls.
+    pos, seen = [], set()
     for pq in cg.get("perQuery", []):
-        for d in pq.get("citedDomains", []):
-            pos.append(("https://" + d, 1))  # domain-level proxy; refine to full URLs if stored
+        urls = pq.get("citedUrls") or ["https://" + d for d in pq.get("citedDomains", [])]
+        for u in urls:
+            if u not in seen:
+                seen.add(u); pos.append((u, 1))
     neg_file = None
     if "--neg" in sys.argv:
         neg_file = sys.argv[sys.argv.index("--neg") + 1]

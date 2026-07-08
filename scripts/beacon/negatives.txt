@@ -1,0 +1,26 @@
+# Negatives for the H1 gate — pages engines did NOT cite for our target queries.
+# Positives come from citation-graph.json (actual cited article URLs).
+#
+# TIER 1 — floor (off-topic, real, stable): if the local scorer can't even separate an
+#   agent-security article from these, it is blind. Minimum bar.
+# TIER 2 — hard-adjacent (real AI/security pages, but NOT the agent-security specifics
+#   engines cite): the meaningful test. A true "ranked-on-SERP-but-not-cited" hard-negative
+#   set comes later via a SERP source (Component A refinement) — noted in ENGINEERING_PLAN.md.
+#
+# One URL per line. Lines starting with # are ignored.
+
+# --- TIER 1: off-topic floor ---
+https://en.wikipedia.org/wiki/Photosynthesis
+https://en.wikipedia.org/wiki/Coffee
+https://en.wikipedia.org/wiki/Association_football
+https://docs.python.org/3/tutorial/introduction.html
+https://www.gnu.org/licenses/gpl-3.0.en.html
+
+# --- TIER 2: on-topic-adjacent but generally not the cited source ---
+https://en.wikipedia.org/wiki/Large_language_model
+https://en.wikipedia.org/wiki/Prompt_engineering
+https://en.wikipedia.org/wiki/Computer_security
+https://en.wikipedia.org/wiki/Application_security
+https://owasp.org/www-project-top-ten/
+https://en.wikipedia.org/wiki/Vulnerability_(computing)
+https://en.wikipedia.org/wiki/Denial-of-service_attack

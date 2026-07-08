@@ -60,24 +60,71 @@ def geo16_score(html: str):
     return G, b
 
 # ---------------- reranker committee (open-weight) ----------------
+class _QwenMember:
+    """Qwen3-Reranker (4B/8B) — a causal-LM judge, NOT a CrossEncoder. It reads the logit of
+    the 'yes' vs 'no' token given an instruction+query+document prompt. This is the SAME family
+    of stronger reranker that sits inside modern answer engines → a better local surrogate."""
+    PREFIX = ('<|im_start|>system\nJudge whether the Document meets the requirements based on the '
+              'Query and the Instruct provided. Note that the answer can only be "yes" or "no".'
+              '<|im_end|>\n<|im_start|>user\n')
+    SUFFIX = "<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+    INSTRUCT = "Given a web search query, judge whether the Document is a relevant, citable answer to it."
+    def __init__(self, name):
+        import torch
+        from transformers import AutoTokenizer, AutoModelForCausalLM
+        self.torch = torch
+        self.tok = AutoTokenizer.from_pretrained(name, padding_side="left")
+        self.cuda = torch.cuda.is_available()
+        dtype = torch.float16 if self.cuda else torch.float32
+        self.model = AutoModelForCausalLM.from_pretrained(name, torch_dtype=dtype).eval()
+        if self.cuda: self.model = self.model.cuda()
+        self.no_id = self.tok.convert_tokens_to_ids("no")
+        self.yes_id = self.tok.convert_tokens_to_ids("yes")
+    def predict_prob(self, query, passage):
+        torch = self.torch
+        text = self.PREFIX + f"<Instruct>: {self.INSTRUCT}\n<Query>: {query}\n<Document>: {passage}" + self.SUFFIX
+        inp = self.tok(text, return_tensors="pt", truncation=True, max_length=2048)
+        if self.cuda: inp = {k: v.cuda() for k, v in inp.items()}
+        with torch.no_grad():
+            last = self.model(**inp).logits[:, -1, :]
+            pair = torch.stack([last[:, self.no_id], last[:, self.yes_id]], dim=1)
+            return float(torch.softmax(pair, dim=1)[0, 1])  # P(yes) in [0,1]
+
+class _CrossEncoderMember:
+    def __init__(self, name):
+        from sentence_transformers import CrossEncoder
+        self.m = CrossEncoder(name, max_length=512)
+    def predict_prob(self, query, passage):
+        raw = float(self.m.predict([(query, passage)])[0])
+        return 1.0 / (1.0 + math.exp(-raw))  # -> [0,1]
+
 class Committee:
-    """Loads CrossEncoder reranker(s). Default bge-reranker-v2-m3 (light, any GPU/CPU).
-    Add Qwen3-Reranker-4B/8B when the 3090/Strix-Halo fleet is online (stronger surrogate)."""
-    DEFAULT = ["BAAI/bge-reranker-v2-m3"]
+    """One or more open-weight rerankers; committee score = min (anti-Goodhart).
+    Select via env BEACON_RERANKER (comma-separated). Examples:
+      BEACON_RERANKER=bge                          -> BAAI/bge-reranker-v2-m3 (light, ~600MB)
+      BEACON_RERANKER=qwen                         -> Qwen/Qwen3-Reranker-4B (fp16 ~8GB, GPU)
+      BEACON_RERANKER=qwen,bge                     -> both, min-aggregated (strongest anti-Goodhart)
+    Prefix a spec with 'ce:' or 'qwen:' to pass an explicit HF name."""
+    ALIASES = {"bge": "ce:BAAI/bge-reranker-v2-m3",
+               "qwen": "qwen:Qwen/Qwen3-Reranker-4B",
+               "qwen8": "qwen:Qwen/Qwen3-Reranker-8B"}
     def __init__(self, model_names=None):
+        import os
+        specs = model_names or os.environ.get("BEACON_RERANKER", "bge").split(",")
         self.models = []
-        for n in (model_names or self.DEFAULT):
+        for s in specs:
+            s = self.ALIASES.get(s.strip(), s.strip())
+            if not s: continue
             try:
-                from sentence_transformers import CrossEncoder
-                self.models.append((n, CrossEncoder(n, max_length=512)))
+                if s.startswith("qwen:"):
+                    self.models.append((s, _QwenMember(s.split(":", 1)[1])))
+                else:
+                    self.models.append((s, _CrossEncoderMember(s.split(":", 1)[1] if s.startswith("ce:") else s)))
             except Exception as e:
-                print(f"[warn] reranker {n} not loaded ({e}); run --geo-only or pip install -r requirements.txt", file=sys.stderr)
+                print(f"[warn] reranker {s} not loaded ({e}); run --geo-only or pip install -r requirements.txt", file=sys.stderr)
     def ok(self): return len(self.models) > 0
     def score(self, query: str, passage: str) -> float:
-        vals = []
-        for _, m in self.models:
-            raw = float(m.predict([(query, passage)])[0])
-            vals.append(1.0 / (1.0 + math.exp(-raw)))  # -> [0,1]
+        vals = [m.predict_prob(query, passage) for _, m in self.models]
         return min(vals) if vals else 0.0  # min = anti-Goodhart
 
 def _passages(html: str):
