@@ -46,3 +46,6 @@ next-env.d.ts
 # Claude Code worktrees and metadata
 .claude/
 scripts/beacon/citation-graph.json
+
+scripts/beacon/.venv/
+__pycache__/
