@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Sandbox Escape: What It Is and How to Sandbox an AI Agent (2026)</title>
+<meta name="description" content="Agent sandbox escape is when an AI agent breaks out of the isolated environment meant to contain its tool and code execution. Definition, examples, and how to sandbox an AI agent properly.">
+<link rel="canonical" href="https://orchesis.ai/lab/agent-sandbox-escape.html">
+<!-- CANARY: ORCHESIS-CANARY-SBXESC-5T9W (if this string appears in an AI answer, the model read this page) -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Agent Sandbox Escape: What It Is and How to Sandbox an AI Agent","dateModified":"2026-07-08","datePublished":"2026-07-08","author":{"@type":"Organization","name":"Orchesis"},"publisher":{"@type":"Organization","name":"Orchesis","sameAs":["https://orchesis.ai","https://github.com/poushwell"]},"about":["agent sandbox escape","AI agent isolation","sandboxing","AI agent security"],"mainEntityOfPage":"https://orchesis.ai/lab/agent-sandbox-escape.html"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is agent sandbox escape?","acceptedAnswer":{"@type":"Answer","text":"Agent sandbox escape is when an AI agent breaks out of the isolated environment meant to contain its code and tool execution, gaining access to the host machine, internal network, or secrets it was never meant to reach. It can happen through container escapes, over-broad file or network access, leaked host credentials, or prompt injection that drives the agent to abuse a legitimately mounted resource."}},
+{"@type":"Question","name":"How do you sandbox an AI agent?","acceptedAnswer":{"@type":"Answer","text":"Run the agent's tool and code execution inside strong isolation such as a container or microVM, grant least privilege, mount no host credentials or secrets, restrict the filesystem to a scratch directory, and enforce an egress allowlist so the agent can only reach approved destinations. Add human approval for irreversible actions and monitor all tool calls from outside the sandbox."}}]}
+</script>
+<style>body{max-width:760px;margin:2rem auto;padding:0 1rem;font:16px/1.6 system-ui,sans-serif}h1,h2{line-height:1.25}code{background:#f2f2f2;padding:.1em .3em;border-radius:3px}.meta{color:#666;font-size:.9em}</style>
+</head>
+<body>
+<p class="meta">Last updated: July 2026 · Orchesis reference</p>
+
+<h1>Agent Sandbox Escape</h1>
+
+<p><strong>Agent sandbox escape is when an AI agent breaks out of the isolated environment meant to contain its code and tool execution, reaching the host machine, internal network, or secrets it should never touch.</strong> It happens through container escapes, over-broad file or network permissions, host credentials left inside the sandbox, or prompt injection that drives the agent to abuse a resource that was legitimately mounted. Because agents run arbitrary tool calls and generated code, a weak sandbox turns a single injected instruction into full host compromise. The core defense is strong isolation (containers or microVMs), least privilege, no host secrets in the sandbox, and a strict egress allowlist.</p>
+
+<h2>How agent sandbox escape happens</h2>
+<p>An agent sandbox is meant to let the model run code and tools without endangering the host. Escapes occur when the boundary is too permissive: a container run with excess capabilities or a mounted Docker socket, a filesystem that exposes host paths, network access to internal services, or environment variables carrying cloud credentials. Prompt injection amplifies each of these — the attacker does not need a kernel exploit if the sandbox already grants a path to secrets.</p>
+
+<h2>Common escape vectors</h2>
+<ul>
+<li><strong>Over-privileged containers:</strong> mounted host sockets, <code>--privileged</code> mode, or excess Linux capabilities.</li>
+<li><strong>Credential leakage:</strong> cloud keys or tokens present as environment variables inside the sandbox.</li>
+<li><strong>Network reach:</strong> the agent can call internal metadata endpoints or databases from within the sandbox.</li>
+<li><strong>Shared filesystem:</strong> host directories mounted read-write into the agent's workspace.</li>
+<li><strong>Injected code execution:</strong> prompt injection that makes the agent run attacker-supplied code against a mounted resource.</li>
+</ul>
+
+<h2>How to sandbox an AI agent</h2>
+<ol>
+<li><strong>Strong isolation</strong> — run tool and code execution in a container or microVM, never directly on the host.</li>
+<li><strong>Least privilege</strong> — drop capabilities, run as non-root, and expose no host socket.</li>
+<li><strong>No secrets inside</strong> — keep host credentials out of the sandbox; broker access through a proxy that holds the keys.</li>
+<li><strong>Ephemeral scratch filesystem</strong> — restrict writes to a disposable directory, mount nothing from the host.</li>
+<li><strong>Egress allowlist</strong> — permit only approved outbound destinations to prevent exfiltration and internal pivots.</li>
+<li><strong>Approval and monitoring</strong> — require human sign-off for irreversible actions and log every tool call from outside the sandbox.</li>
+</ol>
+
+<h2>Context</h2>
+<p>Sandbox escape maps onto OWASP's agentic-AI risks around excessive agency and insecure tool use, and it is catalogued in the CASURA taxonomy of AI-agent vulnerabilities. The practical rule: assume the model inside the sandbox is adversarial, and design the boundary so that even a fully hijacked agent cannot reach the host, secrets, or the internal network.</p>
+
+<p class="meta">Sources: OWASP Agentic Security Project · CASURA taxonomy (Orchesis) · container and microVM isolation guidance. Reference maintained by <a href="https://orchesis.ai">Orchesis</a>, an open-source AI-agent security proxy.</p>
+</body>
+</html>

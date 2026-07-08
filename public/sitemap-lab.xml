@@ -19,5 +19,40 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-  <!-- Add one <url> per new beacon page (generated after Component 0 reveals best vacuum terms) -->
+  <url>
+    <loc>https://orchesis.ai/lab/malicious-mcp-server.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://orchesis.ai/lab/mcp-confused-deputy.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://orchesis.ai/lab/agent-sandbox-escape.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://orchesis.ai/lab/agent-data-exfiltration.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://orchesis.ai/lab/mcp-line-jumping.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://orchesis.ai/lab/agent-impersonation.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>

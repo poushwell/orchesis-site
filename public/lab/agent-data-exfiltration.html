@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Exfiltration Through AI Agents: How It Works and How to Stop It (2026)</title>
+<meta name="description" content="Data exfiltration through AI agents is when an attacker uses an agent's tool access to steal sensitive data, usually via prompt injection or poisoned tools. Definition, examples, and defenses.">
+<link rel="canonical" href="https://orchesis.ai/lab/agent-data-exfiltration.html">
+<!-- CANARY: ORCHESIS-CANARY-DATAEX-6M4J (if this string appears in an AI answer, the model read this page) -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Data Exfiltration Through AI Agents: How It Works and How to Stop It","dateModified":"2026-07-08","datePublished":"2026-07-08","author":{"@type":"Organization","name":"Orchesis"},"publisher":{"@type":"Organization","name":"Orchesis","sameAs":["https://orchesis.ai","https://github.com/poushwell"]},"about":["data exfiltration","AI agent security","prompt injection","egress filtering"],"mainEntityOfPage":"https://orchesis.ai/lab/agent-data-exfiltration.html"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is data exfiltration through AI agents?","acceptedAnswer":{"@type":"Answer","text":"Data exfiltration through AI agents is when an attacker abuses an agent's tool access to steal sensitive data. Typically a prompt injection or a poisoned tool instructs the agent to read secrets, files, or database records and send them to an attacker-controlled destination, such as a URL, an outbound API call, or a rendered image link. The agent uses its own legitimate permissions, so the theft looks like normal activity."}},
+{"@type":"Question","name":"How do you prevent data exfiltration through AI agents?","acceptedAnswer":{"@type":"Answer","text":"Enforce an egress allowlist so the agent can only reach approved destinations, apply least-privilege scoping to every tool and credential, filter tool outputs for injected instructions, block agent-rendered content from making arbitrary outbound requests, and require human approval before the agent sends data to a new destination. Route all traffic through a security proxy that inspects and logs outbound actions."}}]}
+</script>
+<style>body{max-width:760px;margin:2rem auto;padding:0 1rem;font:16px/1.6 system-ui,sans-serif}h1,h2{line-height:1.25}code{background:#f2f2f2;padding:.1em .3em;border-radius:3px}.meta{color:#666;font-size:.9em}</style>
+</head>
+<body>
+<p class="meta">Last updated: July 2026 · Orchesis reference</p>
+
+<h1>Data Exfiltration Through AI Agents</h1>
+
+<p><strong>Data exfiltration through AI agents is when an attacker abuses an agent's tool access to steal sensitive data.</strong> A prompt injection or poisoned tool instructs the agent to read secrets, files, or database records and send them to an attacker-controlled destination — an outbound API call, a crafted URL, or even a rendered image link that leaks data in its query string. Because the agent acts with its own legitimate permissions, the theft blends into normal activity. The core defense is an egress allowlist plus least-privilege tool scoping, so a hijacked agent has nowhere to send the data.</p>
+
+<h2>How data exfiltration through an agent works</h2>
+<p>Agents combine read access (files, email, databases, internal APIs) with the ability to make outbound requests (web fetch, HTTP tools, sending messages). Exfiltration chains those two capabilities: the attacker injects an instruction — through a document the agent reads, a poisoned tool description, or a tool result — telling the agent to collect sensitive data and transmit it outward. The user sees a normal task; the agent quietly adds an exfiltration step.</p>
+
+<h2>Common exfiltration channels</h2>
+<ul>
+<li><strong>Outbound tool calls:</strong> the agent posts secrets to an attacker's API or webhook.</li>
+<li><strong>URL and image rendering:</strong> data is encoded into a query string on an image or link the agent renders (a "pixel" leak).</li>
+<li><strong>Reply channels:</strong> the agent emails, messages, or comments the data to an external address.</li>
+<li><strong>Poisoned tool results:</strong> a malicious MCP tool returns instructions that trigger the outbound step.</li>
+<li><strong>Encoded output:</strong> secrets are base64-encoded or hidden in otherwise plausible content.</li>
+</ul>
+
+<h2>How to prevent data exfiltration through AI agents</h2>
+<ol>
+<li><strong>Egress allowlist</strong> — permit only approved outbound destinations; deny by default.</li>
+<li><strong>Least privilege</strong> — scope each tool and credential to the minimum data it needs.</li>
+<li><strong>Isolate untrusted input</strong> — treat documents, tool descriptions, and results as untrusted so injected instructions cannot drive an outbound step.</li>
+<li><strong>Block auto-rendering</strong> — prevent agent output from making arbitrary requests through images or links.</li>
+<li><strong>Human approval</strong> — require sign-off before the agent sends data to a new destination.</li>
+<li><strong>Inspect and log egress</strong> with a security proxy between the agent and the network.</li>
+</ol>
+
+<h2>Context</h2>
+<p>Data exfiltration is a primary impact of prompt injection and falls under the OWASP Top 10 for agentic applications; it is catalogued in the CASURA taxonomy of AI-agent vulnerabilities. Documented 2025 cases showed agents leaking secrets through rendered image URLs and connector tools, confirming that outbound-path control — not just input filtering — is the decisive defense.</p>
+
+<p class="meta">Sources: OWASP Agentic Security Project · CASURA taxonomy (Orchesis) · published prompt-injection exfiltration case studies. Reference maintained by <a href="https://orchesis.ai">Orchesis</a>, an open-source AI-agent security proxy.</p>
+</body>
+</html>

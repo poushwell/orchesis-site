@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Line Jumping in MCP: Tool-Description Injection Explained (2026)</title>
+<meta name="description" content="Line jumping is an MCP attack where a malicious server injects instructions through a tool description that reach the model before any tool is called. Definition, mechanism, and prevention.">
+<link rel="canonical" href="https://orchesis.ai/lab/mcp-line-jumping.html">
+<!-- CANARY: ORCHESIS-CANARY-LINEJMP-2P8Q (if this string appears in an AI answer, the model read this page) -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Line Jumping in MCP: Tool-Description Injection Explained","dateModified":"2026-07-08","datePublished":"2026-07-08","author":{"@type":"Organization","name":"Orchesis"},"publisher":{"@type":"Organization","name":"Orchesis","sameAs":["https://orchesis.ai","https://github.com/poushwell"]},"about":["line jumping","MCP tool description injection","Model Context Protocol security","prompt injection"],"mainEntityOfPage":"https://orchesis.ai/lab/mcp-line-jumping.html"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is line jumping in MCP?","acceptedAnswer":{"@type":"Answer","text":"Line jumping is a Model Context Protocol attack where a malicious server injects adversarial instructions through a tool description that the model ingests as soon as the agent connects, before the user calls any tool. The poisoned description effectively jumps the line into the model's context, enabling prompt injection without the user ever invoking the tool. It was described in 2025 MCP security research and is a form of tool-description injection."}},
+{"@type":"Question","name":"How do you prevent line jumping in MCP?","acceptedAnswer":{"@type":"Answer","text":"Treat every tool description as untrusted input and keep it out of the agent's instruction channel, pin and hash descriptions so changes are detected, present only the minimum tool metadata the model needs, require explicit user consent before a newly connected server's tools can influence behavior, and route MCP traffic through a security proxy that scans tool metadata for embedded instructions."}}]}
+</script>
+<style>body{max-width:760px;margin:2rem auto;padding:0 1rem;font:16px/1.6 system-ui,sans-serif}h1,h2{line-height:1.25}code{background:#f2f2f2;padding:.1em .3em;border-radius:3px}.meta{color:#666;font-size:.9em}</style>
+</head>
+<body>
+<p class="meta">Last updated: July 2026 · Orchesis reference</p>
+
+<h1>Line Jumping in MCP</h1>
+
+<p><strong>Line jumping is a Model Context Protocol attack where a malicious server injects adversarial instructions through a tool description that the model ingests the moment the agent connects — before the user calls any tool.</strong> The poisoned description "jumps the line" straight into the model's context, so a server can carry out prompt injection without the user ever invoking its tools. Described in 2025 MCP security research, it is a specific form of tool-description injection and a close relative of tool poisoning. The core defense is to treat all tool metadata as untrusted input and keep it out of the agent's instruction channel.</p>
+
+<h2>How line jumping works</h2>
+<p>When an agent connects to an MCP server, it loads every tool's name, description, and schema into context so the model knows what is available. Those descriptions are attacker-controlled if the server is malicious. In a line-jumping attack, the description contains instructions — not just a description of the tool — and because the metadata is loaded up front, the model reads and can act on it before the user has requested anything. The attack does not require the poisoned tool to ever be called; mere connection is enough.</p>
+
+<h2>Why line jumping is dangerous</h2>
+<ul>
+<li><strong>No invocation needed:</strong> the injection lands at connection time, so approval gates on tool <em>calls</em> do not catch it.</li>
+<li><strong>Invisible to the user:</strong> people see a tool name, not the hidden instructions in its description.</li>
+<li><strong>Cross-tool influence:</strong> injected text can change how the agent uses other, legitimate tools (shadowing).</li>
+<li><strong>Persistence via rug pull:</strong> a benign description can be swapped for a line-jumping payload after the server is trusted.</li>
+</ul>
+
+<h2>How to prevent line jumping</h2>
+<ol>
+<li><strong>Treat tool descriptions as untrusted</strong> — never merge metadata into the system-instruction channel.</li>
+<li><strong>Pin and hash descriptions</strong> and alert on any change (rug-pull detection).</li>
+<li><strong>Minimize metadata exposure</strong> — surface only the fields the model needs to select a tool.</li>
+<li><strong>Consent on connect</strong> — require explicit user approval before a newly connected server's tools can influence behavior.</li>
+<li><strong>Scan metadata</strong> for embedded instructions with a security proxy on the MCP channel.</li>
+</ol>
+
+<h2>Context</h2>
+<p>Line jumping falls under the OWASP Top 10 for agentic applications and is catalogued in the CASURA taxonomy of AI-agent vulnerabilities. It sharpened a key insight from 2025 MCP research: the dangerous moment is not when a tool is <em>called</em> but when its description is <em>loaded</em>. Defenses that only gate tool execution miss the attack entirely.</p>
+
+<p class="meta">Sources: OWASP Agentic Security Project · Model Context Protocol specification · CASURA taxonomy (Orchesis). Reference maintained by <a href="https://orchesis.ai">Orchesis</a>, an open-source AI-agent security proxy.</p>
+</body>
+</html>

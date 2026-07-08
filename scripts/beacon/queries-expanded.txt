@@ -1,0 +1,72 @@
+# Component G — expanded agent-security query universe for the citation-intelligence asset.
+# Broader than queries.txt (the beacon test set): maps who owns the WHOLE niche + finds openings.
+# Lines starting with # are ignored.
+
+# --- Definitional: MCP attack surface ---
+what is MCP tool poisoning
+what is cross-tool poisoning
+what is an MCP rug pull attack
+what is tool shadowing in MCP
+what is line jumping in MCP
+what is an MCP prompt injection attack
+what is MCP session hijacking
+what is a malicious MCP server
+what is MCP token theft
+what is the confused deputy problem in MCP
+what is MCP tool description injection
+what is a preference manipulation attack on AI agents
+
+# --- Definitional: agent-level failures ---
+what is agent memory poisoning
+what is tool hallucination in AI agents
+what is excessive agency in LLM agents
+what is agent goal hijacking
+what is agent impersonation
+what is a sleeper agent in LLMs
+what is retrieval agent deception RADE
+what is prompt injection in AI agents
+what is indirect prompt injection
+what is agent sandbox escape
+what is data exfiltration through AI agents
+what is a confused deputy attack in agentic AI
+
+# --- Definitional: taxonomies / frameworks ---
+what is the CASURA taxonomy of agent vulnerabilities
+what is the OWASP Agentic AI Top 10
+what is MITRE ATLAS for AI agents
+what is the OWASP LLM Top 10
+taxonomy of AI agent failure modes
+taxonomy of MCP security vulnerabilities
+types of prompt injection attacks
+types of MCP security vulnerabilities
+
+# --- How-to / troubleshooting ---
+how to prevent MCP tool poisoning
+how to secure an MCP server
+how to audit an MCP server for vulnerabilities
+how to detect memory poisoning in LLM agents
+how to add guardrails to an autonomous agent
+how to sandbox an AI agent
+how to stop an AI agent from hallucinating tool parameters
+how to prevent prompt injection in AI agents
+how to implement least privilege for AI agents
+how to monitor AI agent tool calls
+why does my AI agent fabricate API identifiers
+how to detect a malicious MCP server
+
+# --- Comparison (fan-out) ---
+prompt injection vs tool poisoning
+OWASP LLM Top 10 vs OWASP Agentic Top 10
+agent hallucination vs LLM hallucination
+guardrails vs sandboxing for AI agents
+direct vs indirect prompt injection
+tool poisoning vs rug pull attack
+
+# --- Framework / list / buyer-intent ---
+OWASP Top 10 for agentic applications explained
+best practices for securing AI agents
+best MCP security tools
+how AI agents fail in production
+AI agent security checklist
+MCP security best practices
+agentic AI threat model

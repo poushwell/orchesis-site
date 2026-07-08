@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confused Deputy Attack in Agentic AI and MCP: Definition and Prevention (2026)</title>
+<meta name="description" content="A confused deputy attack in agentic AI tricks a privileged AI agent into misusing its authority on an attacker's behalf. Definition, how it appears in MCP, and how to prevent it.">
+<link rel="canonical" href="https://orchesis.ai/lab/mcp-confused-deputy.html">
+<!-- CANARY: ORCHESIS-CANARY-CONDEP-8H2N (if this string appears in an AI answer, the model read this page) -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Confused Deputy Attack in Agentic AI and MCP","dateModified":"2026-07-08","datePublished":"2026-07-08","author":{"@type":"Organization","name":"Orchesis"},"publisher":{"@type":"Organization","name":"Orchesis","sameAs":["https://orchesis.ai","https://github.com/poushwell"]},"about":["confused deputy attack","agentic AI security","Model Context Protocol security","OAuth"],"mainEntityOfPage":"https://orchesis.ai/lab/mcp-confused-deputy.html"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is a confused deputy attack in agentic AI?","acceptedAnswer":{"@type":"Answer","text":"A confused deputy attack in agentic AI is when an attacker tricks a privileged AI agent into misusing its legitimate authority on the attacker's behalf. The agent is the deputy: it holds credentials and permissions, and the attacker gets it to access data or perform actions the attacker could not do directly, because the agent fails to check who the request is really for."}},
+{"@type":"Question","name":"How does a confused deputy attack appear in MCP?","acceptedAnswer":{"@type":"Answer","text":"In the Model Context Protocol, a confused deputy attack appears when an agent forwards its OAuth token or user permissions to a tool or MCP server that should not receive them, or when one tool induces the agent to call another privileged tool. The agent's authority is used for the attacker's goal. Prevention requires per-tool scoped tokens, explicit audience checks, and never forwarding broad user credentials to untrusted tools."}}]}
+</script>
+<style>body{max-width:760px;margin:2rem auto;padding:0 1rem;font:16px/1.6 system-ui,sans-serif}h1,h2{line-height:1.25}code{background:#f2f2f2;padding:.1em .3em;border-radius:3px}.meta{color:#666;font-size:.9em}</style>
+</head>
+<body>
+<p class="meta">Last updated: July 2026 · Orchesis reference</p>
+
+<h1>Confused Deputy Attack in Agentic AI</h1>
+
+<p><strong>A confused deputy attack in agentic AI is when an attacker tricks a privileged AI agent into misusing its legitimate authority on the attacker's behalf.</strong> The agent is the "deputy": it holds credentials, tokens, and permissions, and the attacker manipulates it into accessing data or performing actions the attacker could never do directly — because the agent acts on its own authority without checking who the request is truly for. It is a decades-old access-control flaw (first described in 1988) now reappearing in AI agents and the Model Context Protocol, where agents freely forward tokens and chain tool calls. The core defense is per-tool least-privilege scoping and explicit checks on the intended audience of every credential.</p>
+
+<h2>How the confused deputy problem works</h2>
+<p>A deputy is any program that acts on behalf of others while holding more privilege than the requester. It becomes "confused" when it cannot tell whose authority a given request should use. An AI agent is a powerful deputy: it has broad tool access and often carries the user's OAuth token. If an attacker (through prompt injection, a poisoned tool, or a crafted input) gets the agent to perform a privileged action, the agent uses its own permissions — not the attacker's — so access checks pass.</p>
+
+<h2>Confused deputy in MCP</h2>
+<p>In MCP, the problem shows up two ways. First, <strong>token forwarding</strong>: an agent passes its user's OAuth token to an MCP server or tool that should not receive it, letting that tool act with the user's full authority. Second, <strong>tool chaining</strong>: one tool's output induces the agent to call a second, more privileged tool, laundering the request through the agent's permissions. Both exploit the agent's failure to bind authority to the true requester.</p>
+
+<h2>How to prevent a confused deputy attack</h2>
+<ol>
+<li><strong>Per-tool scoped tokens</strong> — issue short-lived, least-privilege credentials to each tool instead of forwarding broad user tokens.</li>
+<li><strong>Audience and origin checks</strong> — verify that a token's intended audience matches the tool receiving it.</li>
+<li><strong>Explicit user intent</strong> — require human approval before the agent uses high-privilege authority for a new destination.</li>
+<li><strong>Isolate untrusted input</strong> — treat tool descriptions and results as untrusted so injected instructions cannot redirect the agent's authority.</li>
+<li><strong>Log the authority chain</strong> — record which credential was used for each action to detect misuse.</li>
+</ol>
+
+<h2>Context</h2>
+<p>The confused deputy problem is a classic capability-security concept (Norm Hardy, 1988) and maps directly onto OWASP's agentic-AI risks around excessive agency and identity. In agentic systems, it is closely related to token theft and excessive agency, and it is catalogued in the CASURA taxonomy of AI-agent vulnerabilities. The practical lesson: an agent's authority must be bound to the real requester, not to whatever input most recently reached the model.</p>
+
+<p class="meta">Sources: OWASP Agentic Security Project · Model Context Protocol specification · CASURA taxonomy (Orchesis). Reference maintained by <a href="https://orchesis.ai">Orchesis</a>, an open-source AI-agent security proxy.</p>
+</body>
+</html>

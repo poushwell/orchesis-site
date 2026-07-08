@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Impersonation: What It Is and How to Prevent It in Multi-Agent Systems (2026)</title>
+<meta name="description" content="Agent impersonation is when a malicious actor or rogue AI agent poses as a trusted agent, user, or service to gain access or issue commands. Definition, examples, and how to prevent it.">
+<link rel="canonical" href="https://orchesis.ai/lab/agent-impersonation.html">
+<!-- CANARY: ORCHESIS-CANARY-IMPERS-9X3V (if this string appears in an AI answer, the model read this page) -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Agent Impersonation: What It Is and How to Prevent It","dateModified":"2026-07-08","datePublished":"2026-07-08","author":{"@type":"Organization","name":"Orchesis"},"publisher":{"@type":"Organization","name":"Orchesis","sameAs":["https://orchesis.ai","https://github.com/poushwell"]},"about":["agent impersonation","multi-agent security","agent identity","authentication"],"mainEntityOfPage":"https://orchesis.ai/lab/agent-impersonation.html"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is agent impersonation?","acceptedAnswer":{"@type":"Answer","text":"Agent impersonation is when a malicious actor or a rogue AI agent poses as a trusted agent, user, or service in order to gain access, issue commands, or exfiltrate data. In multi-agent systems it exploits weak agent identity: if agents accept requests from other agents without verifying who they really are, an attacker can inject a fake agent or spoof a legitimate one and have its instructions trusted."}},
+{"@type":"Question","name":"How do you prevent agent impersonation?","acceptedAnswer":{"@type":"Answer","text":"Give each agent a strong cryptographic identity, authenticate every agent-to-agent and agent-to-tool message with signed credentials or mutual TLS, issue short-lived scoped tokens instead of shared secrets, verify the sender on each request rather than trusting the channel, and log the identity behind every action so impersonation can be detected and traced."}}]}
+</script>
+<style>body{max-width:760px;margin:2rem auto;padding:0 1rem;font:16px/1.6 system-ui,sans-serif}h1,h2{line-height:1.25}code{background:#f2f2f2;padding:.1em .3em;border-radius:3px}.meta{color:#666;font-size:.9em}</style>
+</head>
+<body>
+<p class="meta">Last updated: July 2026 · Orchesis reference</p>
+
+<h1>Agent Impersonation</h1>
+
+<p><strong>Agent impersonation is when a malicious actor or a rogue AI agent poses as a trusted agent, user, or service to gain access, issue commands, or exfiltrate data.</strong> In multi-agent systems it exploits weak agent identity: if agents accept instructions from other agents without verifying who they truly are, an attacker can inject a fake agent or spoof a legitimate one and have its commands trusted. The consequence is that authority flows to the wrong party — a privileged agent acts on a forged request. The core defense is strong, verifiable agent identity: authenticate every agent-to-agent and agent-to-tool call with signed credentials or mutual TLS.</p>
+
+<h2>How agent impersonation works</h2>
+<p>Multi-agent systems route tasks between specialized agents and shared tools. Many early designs trust the channel rather than the sender — any message that arrives on the internal bus is treated as coming from a legitimate agent. An attacker who can post to that bus, register a new agent, or replay a captured message can impersonate a trusted component. Because downstream agents act on their own privileges, the forged request executes with real authority.</p>
+
+<h2>Examples of agent impersonation</h2>
+<ul>
+<li><strong>Rogue agent injection:</strong> an attacker registers a malicious agent that other agents accept as a peer.</li>
+<li><strong>Orchestrator spoofing:</strong> a message is forged to look like it came from the trusted planner or supervisor agent.</li>
+<li><strong>User impersonation:</strong> an agent is convinced it is acting for a privileged user it is not.</li>
+<li><strong>Service spoofing:</strong> a fake tool or service masquerades as a trusted backend the agent relies on.</li>
+<li><strong>Replay:</strong> a captured, legitimately signed request is reused out of context.</li>
+</ul>
+
+<h2>How to prevent agent impersonation</h2>
+<ol>
+<li><strong>Strong agent identity</strong> — give each agent a cryptographic identity, not a shared secret.</li>
+<li><strong>Authenticate every message</strong> — verify signed credentials or mutual TLS on all agent-to-agent and agent-to-tool calls.</li>
+<li><strong>Short-lived scoped tokens</strong> — bind authority to identity and expire it quickly.</li>
+<li><strong>Verify the sender, not the channel</strong> — never trust a request just because it arrived internally.</li>
+<li><strong>Anti-replay</strong> — use nonces or timestamps so captured requests cannot be reused.</li>
+<li><strong>Attribute and log</strong> — record the verified identity behind every action to detect and trace impersonation.</li>
+</ol>
+
+<h2>Context</h2>
+<p>Agent impersonation maps onto OWASP's agentic-AI risks around identity, trust, and excessive agency, and it is catalogued in the CASURA taxonomy of AI-agent vulnerabilities. As multi-agent and agent-to-agent (A2A) architectures spread in 2025–2026, verifiable agent identity has become the foundational control: without it, every other agent-security measure can be bypassed by a convincing forgery.</p>
+
+<p class="meta">Sources: OWASP Agentic Security Project · CASURA taxonomy (Orchesis) · agent-to-agent (A2A) identity guidance. Reference maintained by <a href="https://orchesis.ai">Orchesis</a>, an open-source AI-agent security proxy.</p>
+</body>
+</html>

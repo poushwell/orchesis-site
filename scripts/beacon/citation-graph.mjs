@@ -11,6 +11,8 @@ import { readFileSync, writeFileSync } from "node:fs";
 
 const OURS = "orchesis.ai";
 const K = Number(process.env.K || 2); // engines are stochastic → sample K times
+const QUERIES_FILE = process.env.QUERIES_FILE || "./queries.txt";
+const OUT = process.env.OUT || "./citation-graph.json";
 // Ubiquitous, non-vendor surfaces Perplexity cites for almost everything. Owning these
 // is an off-page/video play, not a "own-the-definition" play — so we score vendor
 // authority with them removed to find where NO vendor has claimed the term yet.
@@ -21,7 +23,7 @@ const PLATFORMS = new Set([
 ]);
 const isPlatform = (d) => PLATFORMS.has(d) || [...PLATFORMS].some((p) => d.endsWith("." + p));
 
-const queries = readFileSync(new URL("./queries.txt", import.meta.url), "utf8")
+const queries = readFileSync(new URL(QUERIES_FILE, import.meta.url), "utf8")
   .split("\n").map((s) => s.trim()).filter((s) => s && !s.startsWith("#"));
 
 const domainFreq = {};        // all domains
@@ -70,7 +72,7 @@ const out = {
   vacuumCandidates: vacuums.map((v) => v.query),
   perQuery,
 };
-writeFileSync(new URL("./citation-graph.json", import.meta.url), JSON.stringify(out, null, 2));
+writeFileSync(new URL(OUT, import.meta.url), JSON.stringify(out, null, 2));
 
 console.log(`\n=== TOP CITED DOMAINS (all — who owns agent-security answers) ===`);
 for (const [d, c] of topDomains) console.log(`  ${String(c).padStart(3)}  ${d}${isPlatform(d) ? "  (platform)" : ""}`);
@@ -78,4 +80,4 @@ console.log(`\n=== VENDOR AUTHORITY (platforms removed — the real competition)
 for (const [d, c] of topVendors.slice(0, 15)) console.log(`  ${String(c).padStart(3)}  ${d}`);
 console.log(`\n=== VACUUM CANDIDATES (no vendor owns it → our openings): ${vacuums.length} ===`);
 vacuums.forEach((v) => console.log("  • " + v.query));
-console.log(`\nSaved → scripts/beacon/citation-graph.json`);
+console.log(`\nSaved → scripts/beacon/${OUT.replace(/^\.\//, "")}`);
